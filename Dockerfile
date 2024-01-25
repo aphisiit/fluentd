@@ -15,9 +15,9 @@ RUN apk update \
         tini \
  && apk add --no-cache --virtual .build-deps \
         build-base linux-headers \
-        ruby-dev gnupg \
+        ruby-dev gnupg
 # Add postgresql headers
-        libpq-dev \
+RUN apk add --no-cache libpq-dev \
  && echo 'gem: --no-document' >> /etc/gemrc \
  && gem install oj -v 3.16.1 \
  && gem install json -v 2.6.3 \
@@ -28,10 +28,14 @@ RUN apk update \
  && gem install uri -v 0.12.2 \
  && gem install fluentd -v 1.16.2 \
 # Add postgresql
- && gem install fluent-plugin-postgres \
+ && gem install pg -v 1.5.4 \
  && gem install fluent-plugin-sql \
 # Add kafka
  && gem install fluent-plugin-kafka \
+# Add k8s plugin
+ && gem install kubernetes \
+ && gem install fluent-plugin-kubernetes_metadata_filter \
+ && gem install fluent-plugin-multi-format-parser -v 1.1 \
  && gem install bigdecimal -v 1.4.4 \
  && apk del .build-deps \
  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem /usr/lib/ruby/gems/3.*/gems/fluentd-*/test
